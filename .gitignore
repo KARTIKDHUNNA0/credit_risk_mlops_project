@@ -33,9 +33,11 @@ models/
 *.joblib
 
 # --- DVC ---
+!.dvc/
 .dvc/cache/
 .dvc/tmp/
-*.dvc
+
+
 
 # --- Logs ---
 logs/
@@ -66,3 +68,4 @@ mlenv311/*
 env/
 venv/
 .venv/
+/raw_data
