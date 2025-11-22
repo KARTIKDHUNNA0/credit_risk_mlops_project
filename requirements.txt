@@ -1,0 +1,49 @@
+# --- Core Python libs ---
+pandas
+numpy
+polars
+duckdb
+
+# --- ML Models ---
+lightgbm
+xgboost
+catboost
+scikit-learn
+shap
+
+# --- Model evaluation ---
+scipy
+joblib
+
+# --- MLOps Orchestration ---
+prefect>=2.14.0
+
+# --- Data validation ---
+pandera
+
+# --- Feature Store ---
+feast
+
+# --- API ---
+fastapi
+uvicorn
+
+# --- Deployment & Containers ---
+python-dotenv
+
+# --- Versioning ---
+dvc
+dvc[azure]
+dvc[s3]
+dvc[gdrive]
+
+# --- Monitoring ---
+prometheus-client
+
+# --- Visualization ---
+matplotlib
+seaborn
+
+# --- Notebook Support ---
+jupyter
+ipykernel

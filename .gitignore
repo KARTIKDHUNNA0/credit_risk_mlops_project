@@ -1,0 +1,68 @@
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+*.egg-info/
+
+# --- Virtual environments ---
+.env/
+.venv/
+venv/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+.notebooks/
+
+# --- Data (never store raw in Git) ---
+raw_data/
+data/interim/
+data/processed/
+data/features/
+
+# --- Models ---
+models/
+*.pkl
+*.h5
+*.joblib
+
+# --- DVC ---
+.dvc/cache/
+.dvc/tmp/
+*.dvc
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Prefect ---
+prefect.orion/
+prefect.db
+flows/
+deployments/
+
+# --- Docker ---
+docker/volumes/
+docker/*.log
+
+# --- Kubernetes ---
+kubernetes/*.yaml
+cluster_state/
+
+# --- Build artifacts ---
+dist/
+build/
+ 
+# ENVIRONMENTS
+ 
+mlenv311/
+mlenv311/*
+env/
+venv/
+.venv/
