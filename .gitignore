@@ -15,28 +15,35 @@ __pycache__/
 .env/
 .venv/
 venv/
+mlenv311/
+mlenv311/*
 
 # --- Jupyter ---
 .ipynb_checkpoints/
 .notebooks/
 
-# --- Data (never store raw in Git) ---
+# --- Data ---
 raw_data/
 data/raw/
 data/interim/
-#data/processed/
 data/features/
+
+# allow processed folder
+!data/processed/
+
+# but ignore actual data files inside it (DVC handles them)
+data/processed/*.pkl
+data/processed/*.csv
 
 # --- Models ---
 *.h5
 *.joblib
+models/*.pkl
 
 # --- DVC ---
 !.dvc/
 .dvc/cache/
 .dvc/tmp/
-
-
 
 # --- Logs ---
 logs/
@@ -48,23 +55,6 @@ prefect.db
 flows/
 deployments/
 
-# --- Docker ---
-docker/volumes/
-docker/*.log
-
-# --- Kubernetes ---
-kubernetes/*.yaml
-cluster_state/
-
 # --- Build artifacts ---
 dist/
 build/
- 
-# ENVIRONMENTS
- 
-mlenv311/
-mlenv311/*
-env/
-venv/
-.venv/
-/raw_data

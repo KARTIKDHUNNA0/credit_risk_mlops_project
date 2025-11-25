@@ -37,9 +37,6 @@ dvc[azure]
 dvc[s3]
 dvc[gdrive]
 
-# --- Monitoring ---
-prometheus-client
-
 # --- Visualization ---
 matplotlib
 seaborn

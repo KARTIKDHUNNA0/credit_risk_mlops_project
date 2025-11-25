@@ -1,0 +1,55 @@
+# Welcome to your prefect.yaml file! 
+# This file stores deployment configuration for your flows.
+
+name: credit_risk_mlops_project
+prefect-version: 3.6.4
+
+build: null
+push: null
+
+pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: D:\credit_risk_mlops_project
+
+deployments:
+  - name: default1
+    flow_name: ingest-flow
+    version: null
+    tags: []
+    concurrency_limit: null
+    description: "Ingest raw data"
+    entrypoint: src/pipelines/ingest_flow.py:ingest_flow
+    parameters: {}
+    work_pool:
+      name: default
+      work_queue_name: null
+      job_variables: {}
+    schedules: []
+
+  - name: default2
+    flow_name: feature-flow
+    version: null
+    tags: []
+    concurrency_limit: null
+    description: "Generate and save feature data"
+    entrypoint: src/pipelines/feature_flow.py:feature_flow
+    parameters: {}
+    work_pool:
+      name: default
+      work_queue_name: null
+      job_variables: {}
+    schedules: []
+
+  - name: default3
+    flow_name: train-flow
+    version: null
+    tags: []
+    concurrency_limit: null
+    description: "Train + evaluate + save model"
+    entrypoint: src/pipelines/train_flow.py:train_flow
+    parameters: {}
+    work_pool:
+      name: default
+      work_queue_name: null
+      job_variables: {}
+    schedules: []
