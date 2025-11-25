@@ -22,13 +22,12 @@ venv/
 
 # --- Data (never store raw in Git) ---
 raw_data/
+data/raw/
 data/interim/
-data/processed/
+#data/processed/
 data/features/
 
 # --- Models ---
-models/
-*.pkl
 *.h5
 *.joblib
 

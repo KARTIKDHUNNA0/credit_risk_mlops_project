@@ -1,0 +1,5 @@
+outs:
+- md5: 662a93d36a6168e4f9d3cecf67b8e8f2
+  size: 30513
+  hash: md5
+  path: best_optuna_model.txt
