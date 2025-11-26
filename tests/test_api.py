@@ -9,7 +9,7 @@ import os
 # We create this fixture to ensure the API starts up successfully in GitHub Actions
 def setup_module(module):
     os.makedirs("models", exist_ok=True)
-    dummy_model_path = "models/best_model.pkl"
+    dummy_model_path = "best_optuna_model.txt"
     
     # Create a dummy class that mimics the LightGBM/Sklearn model
     class DummyModel:
