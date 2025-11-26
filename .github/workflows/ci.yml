@@ -28,30 +28,40 @@ jobs:
         # Install test dependencies
         pip install pytest httpx scikit-learn joblib numpy pandas
 
-    # 🚨 CRITICAL FIX: Use Standard Sklearn Dummy Classifier
-    # Using a standard library class prevents "AttributeError: Can't get attribute..." 
-    # because pickle can find 'sklearn.dummy.DummyClassifier' globally.
-    - name: Create Placeholder Model (Bypass File Not Found Error)
+    # 🚨 CRITICAL FIX: Create Dummy Model AND Dummy Data
+    # This satisfies BOTH joblib.load calls in src/api/model.py
+    - name: Create Placeholders (Model + Data)
       run: |
+        # Create directories
         mkdir -p models
+        mkdir -p data/processed
+        
+        # Generate dummy artifacts using Python
         python - << 'EOF'
         import joblib
         import numpy as np
+        import pandas as pd
         from sklearn.dummy import DummyClassifier
 
-        # Initialize a standard DummyClassifier
-        # We use strategy='prior' so it predicts based on class distribution
+        # --- 1. Create Dummy Model ---
         model = DummyClassifier(strategy='prior')
-
-        # Fit on dummy data with both class 0 and class 1
-        # This ensures model.predict_proba returns 2 columns (Prob_0, Prob_1)
         X_train = np.array([[0], [0]])
         y_train = np.array([0, 1])
         model.fit(X_train, y_train)
-
-        # Dump the model
         joblib.dump(model, "models/best_model_lgbm.pkl")
-        print("Created sklearn.dummy model for CI/CD.")
+        print("Created dummy model.")
+
+        # --- 2. Create Dummy Training Data ---
+        # The API loads this to get column names. 
+        # We create a simple DataFrame with a generic feature and TARGET.
+        df = pd.DataFrame({
+            "feature_1": [0.1, 0.2, 0.3],
+            "feature_2": [1, 0, 1],
+            "TARGET": [0, 1, 0]
+        })
+        # Dump it to the path expected by your API (data/processed/)
+        joblib.dump(df, "data/processed/train_FINAL.pkl")
+        print("Created dummy training data.")
         EOF
 
     # 4. Setup PYTHONPATH
