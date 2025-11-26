@@ -25,17 +25,18 @@ jobs:
         python -m pip install --upgrade pip
         # Install core project dependencies
         pip install -r requirements.txt
-        # Install test dependencies
+        # Install test dependencies (required for testing FastAPI + Prefect)
         pip install pytest httpx scikit-learn joblib numpy pandas
 
     # 🚨 CRITICAL FIX STEP: Create Dummy Model (Single-line script)
-    # This prevents the FileNotFoundError and avoids YAML indentation errors.
+    # This creates the models/best_model_lgbm.pkl file needed for FastAPI startup.
     - name: Create Placeholder Model (Bypass File Not Found Error)
       run: |
         mkdir -p models
         python -c "import joblib; import numpy as np; from sklearn.base import BaseEstimator, ClassifierMixin; class DummyLGBM(BaseEstimator, ClassifierMixin): def fit(self, X, y): return self; def predict(self, X): return np.zeros(len(X), dtype=int); def predict_proba(self, X): return np.array([[0.9, 0.1]] * len(X)); joblib.dump(DummyLGBM(), 'models/best_model_lgbm.pkl'); print('Created dummy model for CI/CD.')"
 
     # 4. Setup PYTHONPATH
+    # This allows 'src' modules to be imported correctly inside the runner.
     - name: Add project root to Python path
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
@@ -45,6 +46,7 @@ jobs:
         pytest tests/test_api.py
 
     # 6. Dry Run Prefect Pipeline Logic
+    # This checks if the training script can be imported and run (using synthetic data fallback).
     - name: Dry Run Train Flow Logic
       run: |
         python src/pipelines/train_flow.py
