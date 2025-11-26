@@ -11,38 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Check out your code
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # 2. Setup Python 3.11
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         cache: 'pip'
 
-    # 3. Install Dependencies
-    # We install requirements + test tools
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        # Install core project dependencies
         pip install -r requirements.txt
-        pip install pytest httpx
+        # Install test dependencies
+        pip install pytest httpx scikit-learn joblib numpy pandas
+
+    # 🚨 CRITICAL FIX STEP: Create Dummy Model (Single-line script)
+    # This prevents the FileNotFoundError and avoids YAML indentation errors.
+    - name: Create Placeholder Model (Bypass File Not Found Error)
+      run: |
+        mkdir -p models
+        python -c "import joblib; import numpy as np; from sklearn.base import BaseEstimator, ClassifierMixin; class DummyLGBM(BaseEstimator, ClassifierMixin): def fit(self, X, y): return self; def predict(self, X): return np.zeros(len(X), dtype=int); def predict_proba(self, X): return np.array([[0.9, 0.1]] * len(X)); joblib.dump(DummyLGBM(), 'models/best_model_lgbm.pkl'); print('Created dummy model for CI/CD.')"
 
     # 4. Setup PYTHONPATH
-    # This ensures 'src' modules can be imported
     - name: Add project root to Python path
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
-    # 5. Run Tests
-    # This runs the test_api.py we created.
-    # It will auto-generate a dummy model so the API doesn't crash.
-    - name: Run API Tests
+    # 5. Run API Tests
+    - name: Run FastAPI Smoke Tests
       run: |
         pytest tests/test_api.py
 
-    # 6. Dry Run of Pipelines (Optional but Good)
-    # Checks if your pipeline scripts compile and run without syntax errors
-    - name: Dry Run Ingest Flow
-      run: python src/pipelines/ingest_flow.py
+    # 6. Dry Run Prefect Pipeline Logic
+    - name: Dry Run Train Flow Logic
+      run: |
+        python src/pipelines/train_flow.py
